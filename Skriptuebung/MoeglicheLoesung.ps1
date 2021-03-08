@@ -1,15 +1,22 @@
 ﻿[cmdletBinding()]
 param(
 [Parameter(Mandatory=$true)]
-[string]$Path,
- 
+[ValidateScript({Test-Path -Path $PSItem})]
+[string]$DestinationPath,
+
+[ValidateRange(1,100)]
 [int]$DirCount = 3,
 
+[ValidateRange(1,100)]
 [int]$FileCount = 8,
+
+[ValidateSet("empty","Ipconfig","RandomNumber")]
+$FileContent = "empty",
 
 [switch]$Force
 
 )
+$Path = $DestinationPath
 
 if($Path.EndsWith('\'))
 {
@@ -19,6 +26,16 @@ else
 {
     $Path += "\TestFiles\"
 }
+
+#Erstellen des Dateiinhalts
+[string]$Content
+switch($FileContent)
+{
+    "empty" {$Content = ""}
+    "Ipconfig" {$Content = ipconfig}
+    "RandomNumber" {$Content = Get-Random}
+}
+
 
 #prüft ob TestFiles Ordner bereits vorhanden ist
 if(Test-Path $Path)
@@ -42,7 +59,7 @@ New-Item -Path $Path -ItemType Directory
 #Schleife zum erstellen der Dateien im root Verzeichnis
 for($i=1;$i -le $FileCount; $i++)
 {
-    New-Item -Path $Path -Name "File$i.txt" -ItemType File
+    New-Item -Path $Path -Name "File$i.txt" -ItemType File -Value $Content
 }
 
 #Schleife zum erstellen der geforderten Ordner
@@ -56,6 +73,6 @@ for($i=1; $i -le $DirCount; $i++)
     for($j =1; $j -le $FileCount; $j++)
     {
         Write-Verbose -Message "Schleife zum Dateien erstellen Ordner:$i"
-        New-Item -Path $DirPath -Name "File-O$i-$j.txt" -ItemType File
+        New-Item -Path $DirPath -Name "File-O$i-$j.txt" -ItemType File -Value $Content
     }
 }
