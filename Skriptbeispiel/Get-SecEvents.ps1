@@ -1,10 +1,13 @@
 ﻿[cmdletBinding()]
 param(
 [Parameter(Mandatory=$true)]
+[ValidateSet(4624,4625,4634)] #Lässt nur die angegebenen Werte zu
 [int]$EventId,
 
+[ValidateScript({Test-NetConnection -Computername $PSItem -CommonTcpPort WinRM -InformationLevel Quiet})]
 [string]$Computername = "localhost",
 
+[ValidateRange(5,10)]  #lässt nur Werte im angegebenen Bereich zu
 [int]$Newest = 5
 )
 
