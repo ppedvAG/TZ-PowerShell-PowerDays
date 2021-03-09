@@ -1,4 +1,9 @@
-
+<# Dokumentation PowerShell Profile
+https://docs.microsoft.com/de-de/powershell/module/microsoft.powershell.core/about/about_profiles?view=powershell-5.1
+#>
+<# Dokumentation prompt 
+https://docs.microsoft.com/de-de/powershell/module/microsoft.powershell.core/about/about_prompts?view=powershell-5.1
+#>
 function Color-Console 
 {
     $Host.ui.RawUI.BackgroundColor = "White"
